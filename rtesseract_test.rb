@@ -1,3 +1,7 @@
+require 'rubygems'
+require 'bundler/setup'
+
+
 require 'rtesseract'
 require 'mini_magick'
 require 'mechanize'
