@@ -20,6 +20,7 @@ build/
 /_yardoc/
 /doc/
 /rdoc/
+/temp_img/
 
 ## Environment normalisation:
 /.bundle/
