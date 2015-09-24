@@ -8,16 +8,16 @@ require 'mechanize'
 require 'watir-webdriver'
 require 'watir/extensions/element/screenshot'
 require 'securerandom'
+require 'sidekiq'
 
-def parse_number(number_url)
-  img = MiniMagick::Image.open(number_url)
-  str = RTesseract.new(img.path, processor: 'mini_magick').to_s # 识别
-  File.unlink(img.path)  # 删除临时文件
-  if str.nil?
-    number_url
-  else
-    str
-  end
+# If your client is single-threaded, we just need a single connection in our Redis connection pool
+Sidekiq.configure_client do |config|
+  config.redis = { :namespace => 'crawler', :size => 1 }
+end
+
+# Sidekiq server is multi-threaded so our Redis connection pool size defaults to concurrency (-c)
+Sidekiq.configure_server do |config|
+  config.redis = { :namespace => 'crawler' }
 end
 
 # browser = Watir::Browser.new :phantomjs
@@ -30,6 +30,17 @@ class CourtCrawler
     @data_agent.user_agent = "Mozilla/5.0 (Windows NT 6.1; WOW64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/41.0.2227.0 Safari/537.36"
     @browser = Watir::Browser.new :chrome
     @browser.goto 'http://zhixing.court.gov.cn/search/'
+  end
+
+  def parse_number(number_url)
+    img = MiniMagick::Image.open(number_url)
+    str = RTesseract.new(img.path, processor: 'mini_magick').to_s # 识别
+    File.unlink(img.path)  # 删除临时文件
+    if str.nil?
+      number_url
+    else
+      str
+    end
   end
 
   def crawl(cert_no)
@@ -67,6 +78,16 @@ class CourtCrawler
   end
 end
 
-crawler = CourtCrawler.new
-crawler.crawl 'xxxxxxxxxxxx'
-crawler.close
+
+
+class CrawlerWorker
+  include Sidekiq::Worker
+  def perform(cert_no_arr)
+    crawler = CourtCrawler.new
+    cert_no_arr.each do |cert_no|
+      crawler.crawl cert_no
+    end
+    crawler.close
+  end
+end
+
