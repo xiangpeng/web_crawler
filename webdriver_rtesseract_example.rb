@@ -63,6 +63,7 @@ class CourtCrawler
             puts get_detail "http://zhixing.court.gov.cn/search/detail?id=#{row.links[-1].id}"
           end
         end
+        sleep 1
         break
       end
     end
