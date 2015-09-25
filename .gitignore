@@ -10,7 +10,7 @@ dump.rdb
 /test/tmp/
 /test/version_tmp/
 /tmp/
-
+/log/
 ## Specific to RubyMotion:
 .dat*
 .repl_history
