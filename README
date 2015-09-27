@@ -1,6 +1,8 @@
 1. run redis-server
 2. run sidekiq
-sidekiq -d -q crawler0 -c 4  -L log/sidekiq.log  -r ./s0.rb  && sidekiq -d -q crawler1 -c 4  -L log/sidekiq.log  -r ./s1.rb  && sidekiq -d -q crawler2 -c 4  -L log/sidekiq.log  -r ./s2.rb && sidekiq -d -q crawler3 -c 4  -L log/sidekiq.log  -r ./s3.rb 
+sidekiq -d -q crawler0 -c 4  -L log/sidekiq.log  -r ./s0.rb  && sidekiq -d -q crawler1 -c 4  -L log/sidekiq.log  -r ./s0.rb  && sidekiq -d -q crawler2 -c 4  -L log/sidekiq.log  -r ./s0.rb && sidekiq -d -q crawler3 -c 4  -L log/sidekiq.log  -r ./s0.rb 
+
+sidekiq -d -q crawler0 -c 3  -L log/sidekiq.log  -r ./s0.rb  && sidekiq -d -q crawler1 -c 3  -L log/sidekiq.log  -r ./s0.rb  && sidekiq -d -q crawler2 -c 3  -L log/sidekiq.log  -r ./s0.rb && sidekiq -d -q crawler3 -c 3  -L log/sidekiq.log  -r ./s0.rb 
 3. run sidekiq task like
 arr=some_arr
 Sidekiq::Client.push 'class'=> CrawlerWorker, 'args'=> [arr], 'queue'=> crawler_no
