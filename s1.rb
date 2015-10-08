@@ -29,7 +29,7 @@ class CrawlerWorker
     crawler = CourtCrawler.new
     begin
       cert_no_arr.each do |cert_no|
-        crawler.crawl cert_no
+        crawler.crawl cert_no, true
       end
       crawler.close
     rescue Exception => e
