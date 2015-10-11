@@ -4,6 +4,7 @@ s0.rb use watir-webdriver to crawl data, s1.rb just use rest-client,which is mor
 without webdriver:
 sidekiq -d -q crawler0  -L log/sidekiq.log  -r ./s1.rb  && sidekiq -d -q crawler1  -L log/sidekiq.log  -r ./s1.rb  && sidekiq -d -q crawler2  -L log/sidekiq.log  -r ./s1.rb && sidekiq -d -q crawler3  -L log/sidekiq.log  -r ./s1.rb 
 
+sidekiq -d  -c 5 -q crawler0  -L log/sidekiq.log  -r ./s1.rb  && sidekiq -d -c 5 -q crawler1  -L log/sidekiq.log  -r ./s1.rb  && sidekiq -d -c 5 -q crawler2  -L log/sidekiq.log  -r ./s1.rb && sidekiq -d -c 5 -q crawler3  -L log/sidekiq.log  -r ./s1.rb 
 
 webdriver edtion:
 sidekiq -d -q crawler0 -c 4  -L log/sidekiq.log  -r ./s0.rb  && sidekiq -d -q crawler1 -c 4  -L log/sidekiq.log  -r ./s0.rb  && sidekiq -d -q crawler2 -c 4  -L log/sidekiq.log  -r ./s0.rb && sidekiq -d -q crawler3 -c 4  -L log/sidekiq.log  -r ./s0.rb 
@@ -13,3 +14,12 @@ sidekiq -d -q crawler0 -c 3  -L log/sidekiq.log  -r ./s0.rb  && sidekiq -d -q cr
 3. run sidekiq task like
 arr=some_arr
 Sidekiq::Client.push 'class'=> CrawlerWorker, 'args'=> [arr], 'queue'=> crawler_no
+
+
+192.168.1.1
+192.168.0.1
+
+
+
+
+sidekiq -d  -c 4 -q crawler0  -L log/sidekiq.log  -r ./s1.rb  && sidekiq -d -c 4 -q crawler1  -L log/sidekiq.log  -r ./s1.rb  && sidekiq -d -c 4 -q crawler2  -L log/sidekiq.log  -r ./s1.rb && sidekiq -d -c 4 -q crawler3  -L log/sidekiq.log  -r ./s1.rb 
