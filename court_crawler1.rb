@@ -8,10 +8,15 @@ ActiveRecord::Base.establish_connection(:adapter => "postgresql", :database  => 
 
 class CourtCrawler
   def crawl(cert_no, save_flag=false)
+    sleep rand(5)+1
     puts "crawling #{cert_no}"
     begin
       html_str = RestClient.post "http://zhixing.court.gov.cn/search/search", {searchCourtName:'全国法院（包含地方各级法院）',selectCourtId:1,selectCourtArrange:1,pname:"",cardNum:cert_no,j_captcha:"#{rand(99999)}"}, user_agent: 'Mozilla/5.0 (Windows NT 6.1; WOW64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/41.0.2227.0 Safari/537.36'
     rescue RestClient::ResourceNotFound => e
+      puts "#RestClient::ResourceNotFound404#{cert_no}"
+      return {}
+    rescue RestClient::Found => e
+      puts "RestClient::Found302#{cert_no}"
       return {}
     end
     result_arr = []
