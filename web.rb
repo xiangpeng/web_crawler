@@ -1,3 +1,6 @@
+require 'rubygems'
+require 'bundler/setup'
+
 require 'sinatra'
 require './court_crawler1'
 crawler = CourtCrawler.new
